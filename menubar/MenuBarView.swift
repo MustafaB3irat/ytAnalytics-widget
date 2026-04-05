@@ -433,7 +433,7 @@ struct ChannelHeaderCard: View {
 struct StatsGrid: View {
     let analytics: AnalyticsResponse
     var body: some View {
-        HStack(spacing: 10) {
+        HStack(alignment: .top, spacing: 10) {
             if let v = analytics.metrics.views24hr?.data {
                 StatCard(icon: "eye.fill", color: .blue,
                          value: v.value.compactFormatted, label: "Views (\(v.rangeLabel))")
@@ -460,7 +460,7 @@ struct StatCard: View {
                 .multilineTextAlignment(.center)
         }
         .padding(10)
-        .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
         .background(color.opacity(0.12)).cornerRadius(10)
     }
 }
