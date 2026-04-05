@@ -80,7 +80,7 @@ class AnalyticsViewModel: ObservableObject {
             lastUpdated = Date()
             onUpdate?()
 
-        } catch let e as URLError where e.code == .connectionRefused || e.code == .cannotConnectToHost {
+        } catch let e as URLError where e.code == .cannotConnectToHost || e.code == .networkConnectionLost {
             errorMessage = "Server offline — run: python server.py"
         } catch {
             errorMessage = error.localizedDescription
