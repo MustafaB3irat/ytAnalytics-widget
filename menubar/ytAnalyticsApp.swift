@@ -34,7 +34,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         if let button = statusItem?.button {
             button.image = NSImage(systemSymbolName: "play.rectangle.fill", accessibilityDescription: "YouTube Analytics")
             button.imagePosition = .imageLeft
-            button.title = "YT"
+            button.attributedTitle = Self.dotTitle(color: .systemGray)
             button.action = #selector(togglePopover)
             button.target = self
         }
@@ -73,10 +73,24 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 
     private func updateStatusBarTitle(vm: AnalyticsViewModel) {
         guard let button = statusItem?.button else { return }
-        if let views = vm.analytics?.metrics.views24hr?.data?.value {
-            button.title = " \(views.compactFormatted)"
+        let dotColor: NSColor
+        if vm.errorMessage != nil {
+            dotColor = .systemRed
+        } else if vm.analytics != nil {
+            dotColor = .systemGreen
         } else {
-            button.title = "YT"
+            dotColor = .systemGray
         }
+        button.attributedTitle = Self.dotTitle(color: dotColor)
+    }
+
+    private static func dotTitle(color: NSColor) -> NSAttributedString {
+        NSAttributedString(
+            string: " ●",
+            attributes: [
+                .foregroundColor: color,
+                .font: NSFont.systemFont(ofSize: 9)
+            ]
+        )
     }
 }

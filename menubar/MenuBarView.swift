@@ -125,6 +125,7 @@ struct AnalyticsTab: View {
                     ErrorCard(message: error)
                 } else if let analytics = vm.analytics {
                     ChannelHeaderCard(channel: analytics.channel)
+                    Divider()
                     StatsGrid(analytics: analytics)
                     SubscriberDeltaCard(analytics: analytics)
                     TopVideoCard(analytics: analytics)
@@ -422,7 +423,7 @@ struct ChannelHeaderCard: View {
 struct StatsGrid: View {
     let analytics: AnalyticsResponse
     var body: some View {
-        HStack(spacing: 10) {
+        HStack(alignment: .top, spacing: 10) {
             if let v = analytics.metrics.views24hr?.data {
                 StatCard(icon: "eye.fill", color: .blue,
                          value: v.value.compactFormatted, label: "Views (\(v.rangeLabel))")
@@ -442,13 +443,14 @@ struct StatsGrid: View {
 struct StatCard: View {
     let icon: String; let color: Color; let value: String; let label: String
     var body: some View {
-        VStack(alignment: .leading, spacing: 4) {
+        VStack(alignment: .center, spacing: 4) {
             Image(systemName: icon).foregroundColor(color).font(.system(size: 14))
             Text(value).font(.system(size: 18, weight: .bold))
             Text(label).font(.system(size: 10)).foregroundColor(.secondary)
+                .multilineTextAlignment(.center)
         }
-        .padding(10).frame(maxWidth: .infinity, alignment: .leading)
-        .background(Color(NSColor.controlBackgroundColor)).cornerRadius(10)
+        .padding(10).frame(maxWidth: .infinity)
+        .background(color.opacity(0.12)).cornerRadius(10)
     }
 }
 
@@ -457,7 +459,9 @@ struct StatCard: View {
 struct SubscriberDeltaCard: View {
     let analytics: AnalyticsResponse
     var body: some View {
-        guard let delta = analytics.metrics.subscriberDelta?.data else { return AnyView(EmptyView()) }
+        guard let delta = analytics.metrics.subscriberDelta?.data,
+              delta.gained > 0 || delta.lost > 0
+        else { return AnyView(EmptyView()) }
         let isPos = delta.net >= 0
         let color: Color = isPos ? .green : .red
         let vsSign = delta.vsPrevious >= 0 ? "+" : ""

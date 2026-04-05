@@ -4,7 +4,7 @@
 
 import Foundation
 import Combine
-
+ 
 @MainActor
 class AnalyticsViewModel: ObservableObject {
 
@@ -93,8 +93,10 @@ class AnalyticsViewModel: ObservableObject {
 
         } catch let e as URLError where e.code == .cannotConnectToHost || e.code == .networkConnectionLost {
             errorMessage = "Server offline — run: python server.py"
+            onUpdate?()
         } catch {
             errorMessage = error.localizedDescription
+            onUpdate?()
         }
     }
 
