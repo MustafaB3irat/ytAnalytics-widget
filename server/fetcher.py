@@ -272,6 +272,7 @@ class YouTubeFetcher:
             except Exception as e:
                 result["metrics"][key] = {
                     "label": cfg.get("label", key),
+                    "icon":  cfg.get("icon", "chart.bar"),
                     "error": str(e)
                 }
 

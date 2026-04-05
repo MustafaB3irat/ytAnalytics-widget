@@ -33,8 +33,8 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         statusItem = NSStatusBar.system.statusItem(withLength: NSStatusItem.variableLength)
         if let button = statusItem?.button {
             button.image = NSImage(systemSymbolName: "play.rectangle.fill", accessibilityDescription: "YouTube Analytics")
-            button.imagePosition = .imageLeading
-            button.title = " yt"
+            button.imagePosition = .imageLeft
+            button.title = "YT"
             button.action = #selector(togglePopover)
             button.target = self
         }
@@ -76,7 +76,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         if let views = vm.analytics?.metrics.views24hr?.data?.value {
             button.title = " \(views.compactFormatted)"
         } else {
-            button.title = " yt"
+            button.title = "YT"
         }
     }
 }

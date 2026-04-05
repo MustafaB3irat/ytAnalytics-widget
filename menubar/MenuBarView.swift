@@ -183,29 +183,14 @@ struct SettingsTab: View {
                             .font(.system(size: 11))
                             .foregroundColor(.secondary)
 
-                        Picker("", selection: $vm.refreshIntervalMinutes) {
+                        Picker("Refresh Interval", selection: $vm.refreshIntervalMinutes) {
                             ForEach(intervalOptions, id: \.1) { label, minutes in
                                 Text(label).tag(minutes)
                             }
                         }
-                        .pickerStyle(.segmented)
+                        .pickerStyle(.menu)
                         .labelsHidden()
-
-                        // Custom value stepper for anything not in the picker
-                        HStack {
-                            Text("Custom:")
-                                .font(.system(size: 11))
-                                .foregroundColor(.secondary)
-                            Stepper(
-                                value: $vm.refreshIntervalMinutes,
-                                in: 5...1440,
-                                step: 5
-                            ) {
-                                Text("\(vm.refreshIntervalMinutes) min")
-                                    .font(.system(size: 11, weight: .medium))
-                                    .frame(width: 56, alignment: .leading)
-                            }
-                        }
+                        .frame(maxWidth: .infinity, alignment: .leading)
                     }
                 }
 
