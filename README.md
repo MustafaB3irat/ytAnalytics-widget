@@ -69,9 +69,10 @@ cd ytAnalytics-widget
    - User support email: your Gmail
    - Developer contact email: your Gmail
 4. Click **Save and Continue** through to **Scopes**
-5. Click **Add or Remove Scopes** and add both:
+5. Click **Add or Remove Scopes** and add all three:
    - `https://www.googleapis.com/auth/youtube.readonly`
    - `https://www.googleapis.com/auth/yt-analytics.readonly`
+   - `https://www.googleapis.com/auth/youtube.force-ssl`
 6. Click **Save and Continue** to **Test users**
 7. Click **Add Users** → add your YouTube account email
 8. Click **Save and Continue** → **Back to Dashboard**
