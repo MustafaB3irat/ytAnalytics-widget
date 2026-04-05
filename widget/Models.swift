@@ -164,7 +164,14 @@ struct SubscriberDeltaData: Codable {
     }
 }
 
-// MARK: - Int formatting
+// MARK: - Number formatting
+
+extension Double {
+    /// Removes trailing ".0" — 0.0 → "0", 52.0 → "52", 52.5 → "52.5"
+    var trimmedDecimal: String {
+        truncatingRemainder(dividingBy: 1) == 0 ? String(Int(self)) : String(format: "%.1f", self)
+    }
+}
 
 extension Int {
     /// 12400 → "12.4K", 1_200_000 → "1.2M"

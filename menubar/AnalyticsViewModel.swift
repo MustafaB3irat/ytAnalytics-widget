@@ -20,6 +20,7 @@ class AnalyticsViewModel: ObservableObject {
     @Published var metricTimeRangeDays: [String: Int] = [:]  // key → days (nil keys = not applicable)
     @Published var isSavingSettings: Bool = false
     @Published var settingsSaved: Bool = false
+    @Published var isForceRefreshing: Bool = false
 
     // Snapshots of last saved/loaded state — used to gate the Save button
     private var savedRefreshIntervalMinutes: Int = 15
@@ -66,6 +67,8 @@ class AnalyticsViewModel: ObservableObject {
 
     func forceRefresh() {
         Task {
+            isForceRefreshing = true
+            defer { isForceRefreshing = false }
             _ = try? await URLSession.shared.data(from: refreshURL)
             try? await Task.sleep(nanoseconds: 2_000_000_000)
             await fetchAsync()

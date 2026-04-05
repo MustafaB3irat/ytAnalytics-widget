@@ -48,8 +48,13 @@ struct HeaderBar: View {
             Text("YouTube Analytics")
                 .font(.system(size: 14, weight: .bold))
             Spacer()
-            if vm.isLoading {
-                ProgressView().scaleEffect(0.7)
+            if vm.isLoading || vm.isForceRefreshing {
+                HStack(spacing: 4) {
+                    ProgressView().scaleEffect(0.6)
+                    Text("Loading…")
+                        .font(.system(size: 10))
+                        .foregroundColor(.secondary)
+                }
             }
             if selectedTab == .analytics {
                 Button(action: { vm.forceRefresh() }) {
@@ -57,6 +62,7 @@ struct HeaderBar: View {
                         .font(.system(size: 12))
                 }
                 .buttonStyle(.plain)
+                .disabled(vm.isForceRefreshing)
                 .help("Force refresh from YouTube")
             }
         }
@@ -395,10 +401,14 @@ struct ChannelHeaderCard: View {
                         .font(.system(size: 11)).foregroundColor(.secondary)
                 }
                 HStack(spacing: 8) {
-                    Label(channel.videoCount.compactFormatted, systemImage: "play.rectangle")
-                        .font(.system(size: 10)).foregroundColor(.secondary)
-                    Label(channel.viewCount.compactFormatted, systemImage: "eye")
-                        .font(.system(size: 10)).foregroundColor(.secondary)
+                    HStack(spacing: 2) {
+                        Image(systemName: "play.rectangle").font(.system(size: 10))
+                        Text(channel.videoCount.compactFormatted).font(.system(size: 10))
+                    }.foregroundColor(.secondary)
+                    HStack(spacing: 2) {
+                        Image(systemName: "eye").font(.system(size: 10))
+                        Text(channel.viewCount.compactFormatted).font(.system(size: 10))
+                    }.foregroundColor(.secondary)
                 }
             }
 
@@ -423,14 +433,14 @@ struct ChannelHeaderCard: View {
 struct StatsGrid: View {
     let analytics: AnalyticsResponse
     var body: some View {
-        HStack(alignment: .top, spacing: 10) {
+        HStack(spacing: 10) {
             if let v = analytics.metrics.views24hr?.data {
                 StatCard(icon: "eye.fill", color: .blue,
                          value: v.value.compactFormatted, label: "Views (\(v.rangeLabel))")
             }
             if let wt = analytics.metrics.watchTime24hr?.data {
                 StatCard(icon: "clock.fill", color: .orange,
-                         value: "\(wt.hours)h", label: "Watch Time (\(wt.rangeLabel))")
+                         value: "\(wt.hours.trimmedDecimal)h", label: "Watch Time (\(wt.rangeLabel))")
             }
             if let s = analytics.metrics.totalSubscribers?.data {
                 StatCard(icon: "person.2.fill", color: .purple,
@@ -449,7 +459,8 @@ struct StatCard: View {
             Text(label).font(.system(size: 10)).foregroundColor(.secondary)
                 .multilineTextAlignment(.center)
         }
-        .padding(10).frame(maxWidth: .infinity)
+        .padding(10)
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(color.opacity(0.12)).cornerRadius(10)
     }
 }
@@ -599,6 +610,15 @@ struct LoadingCard: View {
 struct FooterBar: View {
     @ObservedObject var vm: AnalyticsViewModel
     let selectedTab: MenuBarView.Tab
+    @State private var now = Date()
+    private let ticker = Timer.publish(every: 30, on: .main, in: .common).autoconnect()
+
+    private func minutesLabel(from date: Date) -> String {
+        let minutes = Int(now.timeIntervalSince(date) / 60)
+        if minutes < 1 { return "just now" }
+        if minutes < 60 { return "\(minutes) min ago" }
+        return "\(minutes / 60)h ago"
+    }
 
     var body: some View {
         Divider()
@@ -608,9 +628,10 @@ struct FooterBar: View {
                     HStack(spacing: 4) {
                         Image(systemName: "clock")
                             .font(.system(size: 9)).foregroundColor(.secondary)
-                        Text("Updated \(updated, style: .relative) ago")
+                        Text("Updated \(minutesLabel(from: updated))")
                             .font(.system(size: 10)).foregroundColor(.secondary)
                     }
+                    .onReceive(ticker) { now = $0 }
                 }
             } else {
                 HStack(spacing: 4) {
