@@ -21,6 +21,17 @@ class AnalyticsViewModel: ObservableObject {
     @Published var isSavingSettings: Bool = false
     @Published var settingsSaved: Bool = false
 
+    // Snapshots of last saved/loaded state — used to gate the Save button
+    private var savedRefreshIntervalMinutes: Int = 15
+    private var savedMetricToggles: [String: Bool] = [:]
+    private var savedMetricTimeRangeDays: [String: Int] = [:]
+
+    var hasUnsavedChanges: Bool {
+        refreshIntervalMinutes != savedRefreshIntervalMinutes ||
+        metricToggles          != savedMetricToggles          ||
+        metricTimeRangeDays    != savedMetricTimeRangeDays
+    }
+
     var onUpdate: (() -> Void)?
 
     // ── Internals ─────────────────────────────────────────────────────────────
@@ -111,6 +122,10 @@ class AnalyticsViewModel: ObservableObject {
                 metricToggles       = toggles
                 metricTimeRangeDays = timeRanges
             }
+            // Sync snapshots so the Save button starts as disabled
+            savedRefreshIntervalMinutes = refreshIntervalMinutes
+            savedMetricToggles          = metricToggles
+            savedMetricTimeRangeDays    = metricTimeRangeDays
         }
     }
 
@@ -151,6 +166,11 @@ class AnalyticsViewModel: ObservableObject {
 
             // Re-schedule the poll timer with the new interval
             schedulePollTimer()
+
+            // Update snapshots so the Save button disables again
+            savedRefreshIntervalMinutes = refreshIntervalMinutes
+            savedMetricToggles          = metricToggles
+            savedMetricTimeRangeDays    = metricTimeRangeDays
 
             // Re-fetch with the new settings so Analytics labels update immediately
             forceRefresh()

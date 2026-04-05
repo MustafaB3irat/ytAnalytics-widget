@@ -180,6 +180,15 @@ struct SettingsTab: View {
         ("top_video_today",  "Top Video"),
     ]
 
+    // Only items whose key exists in the VM dictionaries (filtered once per render)
+    private var visibleMetricItems: [(key: String, label: String)] {
+        metricLabels.filter { vm.metricToggles[$0.key] != nil }
+    }
+
+    private var visibleTimeRangeItems: [(key: String, label: String)] {
+        timeRangeMetrics.filter { vm.metricTimeRangeDays[$0.key] != nil }
+    }
+
     var body: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 16) {
@@ -207,16 +216,15 @@ struct SettingsTab: View {
                 // ── Metrics toggles ──────────────────────────────────────────
                 SettingsSection(title: "Visible Metrics", icon: "chart.bar") {
                     VStack(spacing: 0) {
-                        ForEach(metricLabels, id: \.key) { item in
-                            if vm.metricToggles[item.key] != nil {
-                                MetricToggleRow(
-                                    label: item.label,
-                                    isOn: Binding(
-                                        get: { vm.metricToggles[item.key] ?? false },
-                                        set: { vm.metricToggles[item.key] = $0 }
-                                    )
-                                )
-                            }
+                        ForEach(Array(visibleMetricItems.enumerated()), id: \.element.key) { index, item in
+                            MetricToggleRow(
+                                label: item.label,
+                                isOn: Binding(
+                                    get: { vm.metricToggles[item.key] ?? false },
+                                    set: { vm.metricToggles[item.key] = $0 }
+                                ),
+                                showDivider: index < visibleMetricItems.count - 1
+                            )
                         }
                     }
                     .background(Color(NSColor.controlBackgroundColor))
@@ -228,16 +236,15 @@ struct SettingsTab: View {
                 // ── Time ranges ───────────────────────────────────────────────
                 SettingsSection(title: "Time Ranges", icon: "calendar") {
                     VStack(spacing: 0) {
-                        ForEach(timeRangeMetrics, id: \.key) { item in
-                            if vm.metricTimeRangeDays[item.key] != nil {
-                                TimeRangeRow(
-                                    label: item.label,
-                                    days: Binding(
-                                        get: { vm.metricTimeRangeDays[item.key] ?? 1 },
-                                        set: { vm.metricTimeRangeDays[item.key] = $0 }
-                                    )
-                                )
-                            }
+                        ForEach(Array(visibleTimeRangeItems.enumerated()), id: \.element.key) { index, item in
+                            TimeRangeRow(
+                                label: item.label,
+                                days: Binding(
+                                    get: { vm.metricTimeRangeDays[item.key] ?? 1 },
+                                    set: { vm.metricTimeRangeDays[item.key] = $0 }
+                                ),
+                                showDivider: index < visibleTimeRangeItems.count - 1
+                            )
                         }
                     }
                     .background(Color(NSColor.controlBackgroundColor))
@@ -247,9 +254,7 @@ struct SettingsTab: View {
                 Divider()
 
                 // ── Save button ───────────────────────────────────────────────
-                HStack {
-                    Spacer()
-
+                VStack(spacing: 8) {
                     if vm.settingsSaved {
                         Label("Saved", systemImage: "checkmark.circle.fill")
                             .font(.system(size: 12, weight: .medium))
@@ -265,14 +270,14 @@ struct SettingsTab: View {
                             Text(vm.isSavingSettings ? "Saving…" : "Save Settings")
                                 .font(.system(size: 12, weight: .semibold))
                         }
-                        .padding(.horizontal, 16)
-                        .padding(.vertical, 7)
-                        .background(Color.red)
+                        .frame(maxWidth: .infinity)
+                        .padding(.vertical, 8)
+                        .background(vm.hasUnsavedChanges ? Color.red : Color(NSColor.separatorColor))
                         .foregroundColor(.white)
                         .cornerRadius(8)
                     }
                     .buttonStyle(.plain)
-                    .disabled(vm.isSavingSettings)
+                    .disabled(!vm.hasUnsavedChanges || vm.isSavingSettings)
                 }
 
                 // ── Info note ─────────────────────────────────────────────────
@@ -312,26 +317,30 @@ struct SettingsSection<Content: View>: View {
 struct MetricToggleRow: View {
     let label: String
     @Binding var isOn: Bool
+    var showDivider: Bool = true
 
     var body: some View {
-        Toggle(isOn: $isOn) {
+        HStack {
             Text(label)
                 .font(.system(size: 12))
+            Spacer()
+            Toggle("", isOn: $isOn)
+                .toggleStyle(.switch)
+                .controlSize(.small)
+                .labelsHidden()
         }
-        .toggleStyle(.switch)
-        .controlSize(.small)
         .padding(.horizontal, 12)
         .padding(.vertical, 8)
-        .overlay(
-            Divider().padding(.horizontal, 0),
-            alignment: .bottom
-        )
+        .overlay(alignment: .bottom) {
+            if showDivider { Divider() }
+        }
     }
 }
 
 struct TimeRangeRow: View {
     let label: String
     @Binding var days: Int
+    var showDivider: Bool = true
 
     var body: some View {
         HStack {
@@ -350,10 +359,9 @@ struct TimeRangeRow: View {
         }
         .padding(.horizontal, 12)
         .padding(.vertical, 8)
-        .overlay(
-            Divider().padding(.horizontal, 0),
-            alignment: .bottom
-        )
+        .overlay(alignment: .bottom) {
+            if showDivider { Divider() }
+        }
     }
 }
 
