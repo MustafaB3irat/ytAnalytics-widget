@@ -17,31 +17,11 @@ A lightweight local server authenticates with Google via OAuth and serves your Y
 - **Menu bar app** — live view count in your status bar; click for the full popover with all metrics and settings
 - **Notification Centre widget** — Small, Medium, and Large sizes with your channel card and stats
 
-```
-┌─────────────────────────────────────┐
-│ ▶  YouTube Analytics         ↻      │
-├─────────────────────────────────────┤
-│  ╭──────╮  Mustafa B'irat    ↗      │
-│  │  👤  │  @MustafaBirat            │
-│  ╰──────╯  ▶ 42 videos  👁 540K    │
-├─────────────────────────────────────┤
-│  👁 12.4K    ⏱ 52.0h    👥 8.4K    │
-│  Views(7d)  Watch Time  Subscribers │
-├─────────────────────────────────────┤
-│  ↑ +12 subscribers (7d)             │
-│    +5 vs previous · 14 gained       │
-├─────────────────────────────────────┤
-│  ⭐ Top Video                       │
-│  [🖼] Switzerland Camping 🏕        │
-│       4.2K views · 14h 0m           │
-├─────────────────────────────────────┤
-│  💬 Latest Comments                 │
-│  Ahmed K.  Mashallah, amazing! 🎥   │
-│  Sara M.   Can you do hiking next?  │
-├─────────────────────────────────────┤
-│  Updated 3 minutes ago        Quit  │
-└─────────────────────────────────────┘
-```
+<div align="center">
+<img src="docs/screenshots/analytics.png" width="300" alt="Analytics tab" />
+&nbsp;&nbsp;&nbsp;
+<img src="docs/screenshots/settings.png" width="300" alt="Settings tab" />
+</div>
 
 ---
 
