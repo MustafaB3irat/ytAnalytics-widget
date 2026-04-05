@@ -253,6 +253,16 @@ struct SettingsTab: View {
 
                 Divider()
 
+                // ── Info note ─────────────────────────────────────────────────
+                HStack(alignment: .top, spacing: 6) {
+                    Image(systemName: "info.circle")
+                        .font(.system(size: 11))
+                        .foregroundColor(.secondary)
+                    Text("Settings are saved to config.json and take effect immediately — no server restart needed.")
+                        .font(.system(size: 10))
+                        .foregroundColor(.secondary)
+                }
+
                 // ── Save button ───────────────────────────────────────────────
                 VStack(spacing: 8) {
                     if vm.settingsSaved {
@@ -278,16 +288,6 @@ struct SettingsTab: View {
                     }
                     .buttonStyle(.plain)
                     .disabled(!vm.hasUnsavedChanges || vm.isSavingSettings)
-                }
-
-                // ── Info note ─────────────────────────────────────────────────
-                HStack(alignment: .top, spacing: 6) {
-                    Image(systemName: "info.circle")
-                        .font(.system(size: 11))
-                        .foregroundColor(.secondary)
-                    Text("Settings are saved to config.json and take effect immediately — no server restart needed.")
-                        .font(.system(size: 10))
-                        .foregroundColor(.secondary)
                 }
             }
             .padding(14)
@@ -607,8 +607,6 @@ struct FooterBar: View {
                         Text("Updated \(updated, style: .relative) ago")
                             .font(.system(size: 10)).foregroundColor(.secondary)
                     }
-                } else {
-                    Text("ytAnalytics").font(.system(size: 10)).foregroundColor(.secondary)
                 }
             } else {
                 HStack(spacing: 4) {
@@ -619,8 +617,16 @@ struct FooterBar: View {
                 }
             }
             Spacer()
-            Button("Quit") { NSApp.terminate(nil) }
-                .buttonStyle(.plain).font(.system(size: 10)).foregroundColor(.secondary)
+            Button(action: { NSApp.terminate(nil) }) {
+                Label("Quit", systemImage: "power")
+                    .font(.system(size: 10, weight: .medium))
+                    .padding(.horizontal, 8)
+                    .padding(.vertical, 4)
+                    .background(Color.red.opacity(0.12))
+                    .foregroundColor(Color.red.opacity(0.85))
+                    .clipShape(RoundedRectangle(cornerRadius: 5))
+            }
+            .buttonStyle(.plain)
         }
         .padding(.horizontal, 14).padding(.vertical, 8)
         .background(Color(NSColor.controlBackgroundColor))

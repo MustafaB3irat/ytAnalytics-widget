@@ -68,7 +68,7 @@ struct MetricsPayload: Codable {
 
 struct MetricWrapper<T: Codable>: Codable {
     let label: String
-    let icon: String
+    let icon: String?   // optional — error responses from the server may omit it
     let data: T?
     let error: String?
 }
