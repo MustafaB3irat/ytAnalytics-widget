@@ -10,12 +10,26 @@ SERVER_DIR="$REPO/server"
 VENV="$SERVER_DIR/venv"
 CREDENTIALS="$SERVER_DIR/credentials/client_secret.json"
 LOG_DIR="$HOME/Library/Logs/ytAnalytics"
+APP_BUNDLE="$REPO/ytAnalyticsMenuBar.app"
 
 clear
 echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
 echo "  ytAnalytics — One-click Setup"
 echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
 echo ""
+
+# ── Install app to ~/Applications ────────────────────────────────────────────
+
+if [ -d "$APP_BUNDLE" ]; then
+    echo "📱  Installing ytAnalyticsMenuBar.app → ~/Applications…"
+    mkdir -p "$HOME/Applications"
+    rm -rf "$HOME/Applications/ytAnalyticsMenuBar.app"
+    cp -R "$APP_BUNDLE" "$HOME/Applications/"
+    # Remove quarantine so macOS doesn't block it
+    xattr -rd com.apple.quarantine "$HOME/Applications/ytAnalyticsMenuBar.app" 2>/dev/null || true
+    echo "✓  App installed"
+    echo ""
+fi
 
 # ── Pre-flight: client_secret.json ────────────────────────────────────────────
 
@@ -148,16 +162,17 @@ while [ $COUNT -lt $MAX ]; do
         echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
         echo "✅  Setup complete!"
         echo ""
-        echo "   Server: http://localhost:8765"
-        echo "   Logs:   tail -f $LOG_DIR/server.log"
+        echo "   Your YouTube stats are now live in the menu bar."
         echo ""
-        echo "   Next steps:"
-        echo "   1. Open xcode/ytAnalytics.xcodeproj in Xcode"
-        echo "   2. Set your Apple ID signing team on both targets"
-        echo "   3. Build and run each target (⌘R)"
-        echo "   4. Add the widget via Notification Centre → Edit Widgets"
+        echo "   To add the widget:"
+        echo "   Right-click your desktop → Edit Widgets"
+        echo "   → search 'YouTube Analytics' → drag it in"
         echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
         echo ""
+        # Launch the app if it was installed
+        if [ -d "$HOME/Applications/ytAnalyticsMenuBar.app" ]; then
+            open "$HOME/Applications/ytAnalyticsMenuBar.app"
+        fi
         read -rp "Press Enter to close…"
         exit 0
     fi

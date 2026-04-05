@@ -2,69 +2,66 @@
 
 # YouTube Analytics
 
-**Your YouTube channel stats — natively on your Mac.**
+**Your YouTube channel stats — right in your Mac's menu bar and Notification Centre.**
 
 [![macOS](https://img.shields.io/badge/macOS-14%2B-black?logo=apple)](https://apple.com/macos)
-[![Python](https://img.shields.io/badge/Python-3.10%2B-blue?logo=python)](https://python.org)
-[![Swift](https://img.shields.io/badge/Swift-5.9-orange?logo=swift)](https://swift.org)
 
 </div>
 
 ---
 
-A lightweight local server authenticates with Google via OAuth and serves your YouTube analytics as JSON. Two native macOS interfaces display it — no browser, no dashboard, no manual refreshing.
+A tiny Mac app that shows your YouTube channel stats without opening a browser. Your data stays entirely on your Mac — nothing is sent anywhere.
 
-- **Menu bar app** — live view count in your status bar; click for the full popover with all metrics and settings
-- **Notification Centre widget** — Small, Medium, and Large sizes with your channel card and stats
+- **Menu bar** — see your views at a glance; click for the full breakdown
+- **Notification Centre widget** — Small, Medium, and Large sizes
 
 <div align="center">
-<img src="docs/screenshots/analytics.png" width="300" alt="Analytics tab" />
+<img src="docs/screenshots/analytics.png" width="300" alt="Analytics view" />
 &nbsp;&nbsp;&nbsp;
-<img src="docs/screenshots/settings.png" width="300" alt="Settings tab" />
+<img src="docs/screenshots/settings.png" width="300" alt="Settings view" />
 </div>
 
 ---
 
 ## Requirements
 
-- macOS 14 Sonoma or later
-- Python 3.10+
-- Xcode 15+
+- Mac running macOS 14 Sonoma or later
 - A Google account with an active YouTube channel
 
 ---
 
 ## Setup
 
-### 1. Clone
+### 1. Download
 
-```bash
-git clone https://github.com/MustafaB3irat/ytAnalytics-widget.git
-cd ytAnalytics-widget
-```
+Grab the latest release from the [Releases page](../../releases) and unzip it anywhere — your Desktop works fine.
 
 ---
 
-### 2. Google Cloud & OAuth (one-time, ~10 minutes)
+### 2. Connect to Google (one-time, ~10 minutes)
 
-#### 2a. Create a project
+The app reads your YouTube data using Google's official API. You need to create a free access key in Google Cloud Console. You only do this once.
+
+#### Create a project
 
 1. Go to [console.cloud.google.com](https://console.cloud.google.com)
 2. Click the project dropdown (top-left) → **New Project**
 3. Name it `ytAnalytics` → **Create**
 4. Make sure the new project is selected before continuing
 
-#### 2b. Enable the APIs
+#### Turn on YouTube access
 
 1. Go to **APIs & Services → Library**
 2. Search **YouTube Data API v3** → **Enable**
 3. Search **YouTube Analytics API** → **Enable**
 
-#### 2c. Configure the OAuth consent screen
+#### Set up the consent screen
+
+This is what Google shows when asking for your permission.
 
 1. Go to **APIs & Services → OAuth consent screen**
 2. User type: **External** → **Create**
-3. Fill in the required fields:
+3. Fill in:
    - App name: `ytAnalytics`
    - User support email: your Gmail
    - Developer contact email: your Gmail
@@ -73,200 +70,87 @@ cd ytAnalytics-widget
    - `https://www.googleapis.com/auth/youtube.readonly`
    - `https://www.googleapis.com/auth/yt-analytics.readonly`
    - `https://www.googleapis.com/auth/youtube.force-ssl`
-6. Click **Save and Continue** to **Test users**
-7. Click **Add Users** → add your YouTube account email
-8. Click **Save and Continue** → **Back to Dashboard**
+6. **Save and Continue** → **Test users** → **Add Users** → add your YouTube account email
+7. **Save and Continue** → **Back to Dashboard**
 
-> **Why "External" and "Test users"?** Google requires apps in development to be external. Only the email addresses you list as test users can sign in. Your data stays entirely local.
-
-#### 2d. Create the OAuth credential
+#### Create the access key
 
 1. Go to **APIs & Services → Credentials**
-2. Click **Create Credentials → OAuth 2.0 Client ID**
+2. **Create Credentials → OAuth 2.0 Client ID**
 3. Application type: **Desktop app** → Name it anything → **Create**
-4. Click **Download JSON** on the newly created credential
+4. Click **Download JSON** on the new credential
 5. Rename the file to `client_secret.json`
-6. Place it at:
+6. Place it inside the unzipped folder at:
    ```
    server/credentials/client_secret.json
    ```
-
-The `credentials/` folder is git-ignored — this file never leaves your machine.
 
 ---
 
 ### 3. Run setup.command
 
-Double-click **`setup.command`** in Finder.
+Double-click **`setup.command`** inside the unzipped folder.
 
-Terminal opens and the script will:
-- Create a Python virtual environment in `server/venv/`
-- Install all dependencies
-- Register the server as a launchd agent (auto-starts on every login)
-- Start the server immediately
+It will:
+- Install the menu bar app to your Applications folder
+- Set up the background server that fetches your stats
+- Register it to start automatically on every login
+- Open your browser for a one-time Google sign-in
 
-On first run, **your browser will open** asking you to sign in with Google and approve read-only access to your YouTube data. After approval the token is saved to `server/credentials/token.json` — you will never be prompted again.
+After you approve access in the browser, your stats will appear in the menu bar within a few seconds.
 
-> If you prefer the terminal: `bash setup.command`
-
----
-
-### 4. Xcode — Widget & Menu Bar app
-
-The Xcode project is pre-configured with both targets. No setup beyond signing.
-
-1. Open **`xcode/ytAnalytics.xcodeproj`** in Xcode
-2. For each target (`ytAnalyticsWidget` and `ytAnalyticsMenuBar`):
-   - Select the target in the sidebar
-   - Go to **Signing & Capabilities** → set your **Team** (a free Apple ID works)
-3. Select a target from the scheme picker → **⌘R** to build and run
-
-**Adding the widget:**
-- Right-click your desktop or open Notification Centre
-- Click **Edit Widgets** → search "YouTube Analytics"
-- Drag it in — available in Small, Medium, and Large sizes
-
-The menu bar app places a `▶` icon in your status bar. Click it to open the popover.
+> If macOS says the file can't be opened, right-click it and choose **Open**.
 
 ---
 
-## Configuration
+### 4. Add the Notification Centre widget (optional)
 
-All settings live in `config.json` at the repo root. The menu bar app's **Settings tab** can update them live — no restart needed.
-
-```json
-{
-  "metrics": {
-    "views_24hr":        { "enabled": true,  "time_range_days": 1 },
-    "watch_time_24hr":   { "enabled": true,  "time_range_days": 1 },
-    "total_subscribers": { "enabled": true  },
-    "subscriber_delta":  { "enabled": true,  "time_range_days": 1 },
-    "top_video_today":   { "enabled": true,  "time_range_days": 1 },
-    "latest_comments":   { "enabled": true,  "max_count": 5 }
-  },
-  "server": {
-    "port": 8765,
-    "refresh_interval_seconds": 900
-  }
-}
-```
-
-**`time_range_days`** — how many days back to aggregate (1–90).  
-**`max_count`** — how many latest comments to fetch.  
-**`refresh_interval_seconds`** — how often the server re-fetches from YouTube (default: 900 = 15 min).
+1. Right-click your desktop → **Edit Widgets** (or open Notification Centre and scroll down)
+2. Search **YouTube Analytics**
+3. Drag in the size you want — Small, Medium, or Large
 
 ---
 
-## Server management
+## Changing settings
 
-The server runs as a background launchd agent and restarts automatically after login or crashes.
+Click the `●` dot in your menu bar → **Settings tab**.
 
-```bash
-# View live logs
-tail -f ~/Library/Logs/ytAnalytics/server.log
+You can toggle metrics on/off and adjust how many days of data each metric covers. YouTube's analytics data has a 48–72 hour delay, so setting ranges to 7 days or more gives the most reliable numbers.
 
-# Check the agent is running
-launchctl list | grep ytanalytics
-
-# Stop the server
-launchctl unload ~/Library/LaunchAgents/com.ytanalytics.server.plist
-
-# Start it again
-launchctl load ~/Library/LaunchAgents/com.ytanalytics.server.plist
-
-# Force a data refresh without restarting
-curl http://localhost:8765/refresh
-```
-
----
-
-## API Reference
-
-| Method | Endpoint | Description |
-|---|---|---|
-| `GET` | `/analytics` | All enabled metrics (cached) |
-| `GET` | `/refresh` | Force immediate re-fetch from YouTube |
-| `GET` | `/settings` | Current interval + metric toggles + time ranges |
-| `PATCH` | `/settings` | Update interval / toggles / time ranges live |
-| `GET` | `/config` | Raw `config.json` contents |
-| `GET` | `/health` | Server status + last fetch time |
-
-**Example `PATCH /settings` body:**
-```json
-{
-  "refresh_interval_seconds": 300,
-  "metrics": {
-    "views_24hr": { "enabled": true, "time_range_days": 7 },
-    "latest_comments": { "enabled": false }
-  }
-}
-```
-
----
-
-## Project Structure
-
-```
-ytAnalytics-widget/
-├── setup.command                  ← Double-click to set everything up
-├── config.json                    ← All settings
-├── server/
-│   ├── server.py                  ← Flask server (localhost:8765)
-│   ├── fetcher.py                 ← YouTube API calls
-│   ├── auth.py                    ← OAuth flow + token refresh
-│   ├── requirements.txt
-│   └── credentials/               ← Git-ignored
-│       ├── client_secret.json     ← You add this (Step 2d)
-│       └── token.json             ← Auto-generated on first run
-├── widget/
-│   ├── Models.swift               ← Shared data models (both targets)
-│   ├── Provider.swift             ← WidgetKit timeline provider
-│   ├── WidgetView.swift           ← Small / Medium / Large UI
-│   └── ytAnalyticsWidget.swift    ← Widget entry point
-├── menubar/
-│   ├── ytAnalyticsApp.swift       ← NSStatusItem + AppDelegate
-│   ├── AnalyticsViewModel.swift   ← Polling + settings state
-│   └── MenuBarView.swift          ← Analytics + Settings tabs
-└── xcode/
-    ├── ytAnalytics.xcodeproj      ← Pre-configured, open this
-    ├── ytAnalyticsWidget/         ← Widget assets + Info.plist
-    └── ytAnalyticsMenuBar/        ← Menu bar assets + entitlements
-```
+Hit **Save** — changes take effect immediately without restarting anything.
 
 ---
 
 ## Troubleshooting
 
-**Widget / app shows "Server Offline"**
-→ The server isn't running. Re-run `setup.command` or start it manually:
-`launchctl load ~/Library/LaunchAgents/com.ytanalytics.server.plist`
+**App says "Server Offline"**
+The background server isn't running. Re-run `setup.command` to restart it.
 
-**Browser didn't open / OAuth failed**
-→ Make sure `server/credentials/client_secret.json` exists and your Google account is listed as a test user in the OAuth consent screen (Step 2c).
+**Browser didn't open for Google sign-in**
+Make sure `server/credentials/client_secret.json` exists and your Google account is added as a test user in the OAuth consent screen (Step 2).
 
-**Token expired or auth error**
-→ Delete `server/credentials/token.json` and restart the server — a new browser sign-in runs automatically.
+**Sign-in failed or auth error**
+Delete `server/credentials/token.json` and re-run `setup.command` — it will ask you to sign in again.
 
-**No data — stays loading**
-→ Normal on first run. The server fetches from YouTube once on startup (~5–10 seconds). Check status: `curl http://localhost:8765/health`
+**All metrics show 0**
+YouTube's analytics API has a 48–72 hour delay. Data for "today" isn't available yet — increase the time range to 7 days in Settings.
 
 **Comments not showing**
-→ YouTube's Comments API is unavailable on channels with comments disabled. Set `"latest_comments": { "enabled": false }` in `config.json`.
+Your channel may have comments disabled, or the `youtube.force-ssl` scope wasn't added during setup. You can turn off Latest Comments in Settings.
 
-**Xcode signing error**
-→ Select your Apple ID team in **Signing & Capabilities** for both the `ytAnalyticsWidget` and `ytAnalyticsMenuBar` targets. A free Apple ID works.
-
-**YouTube quota exceeded**
-→ Default is 10,000 units/day. At 15-minute refresh intervals, ytAnalytics uses ~96 units/day. Increase `refresh_interval_seconds` in `config.json` if needed.
+**macOS blocks the app on first open**
+Right-click the app or `setup.command` → **Open** → **Open** again to confirm.
 
 ---
 
-## Security
+## Your data stays on your Mac
 
-- OAuth tokens are stored **locally only** in `server/credentials/token.json` (git-ignored)
-- The server binds to `127.0.0.1` — never network-accessible
-- API scopes are **read-only**: `youtube.readonly` + `yt-analytics.readonly`
-- Your credentials and data never leave your machine
+The app never sends your data anywhere. Here's what actually happens:
+
+- You sign in with Google once — the access token is saved in `server/credentials/token.json` on your Mac only
+- The background server fetches your stats directly from YouTube and stores them in memory
+- Everything runs on `localhost` — nothing is reachable from outside your computer
+- The app only requests read-only access to your YouTube data — it cannot make any changes to your channel
 
 ---
 
