@@ -30,17 +30,21 @@ A tiny Mac app that shows your YouTube channel stats without opening a browser. 
 
 ---
 
-## Setup
+## Install
 
 ### 1. Download
 
-Grab the latest release from the [Releases page](../../releases) and unzip it anywhere — your Desktop works fine.
+Grab **YouTube-Analytics.dmg** from the [Releases page](../../releases), open it, and drag the app to your Applications folder.
+
+> If macOS says the app can't be opened, right-click it → **Open** → **Open** to confirm.
 
 ---
 
 ### 2. Connect to Google (one-time, ~10 minutes)
 
-The app reads your YouTube data using Google's official API. You need to create a free access key in Google Cloud Console. You only do this once.
+The app reads your YouTube data using Google's official API. You need to create a free access key — the app walks you through it step by step when you first open it.
+
+Here's what you'll do:
 
 #### Create a project
 
@@ -57,15 +61,13 @@ The app reads your YouTube data using Google's official API. You need to create 
 
 #### Set up the consent screen
 
-This is what Google shows when asking for your permission.
-
 1. Go to **APIs & Services → OAuth consent screen**
 2. User type: **External** → **Create**
 3. Fill in:
    - App name: `ytAnalytics`
    - User support email: your Gmail
    - Developer contact email: your Gmail
-4. Click **Save and Continue** through to **Scopes**
+4. **Save and Continue** through to **Scopes**
 5. Click **Add or Remove Scopes** and add all three:
    - `https://www.googleapis.com/auth/youtube.readonly`
    - `https://www.googleapis.com/auth/yt-analytics.readonly`
@@ -73,39 +75,26 @@ This is what Google shows when asking for your permission.
 6. **Save and Continue** → **Test users** → **Add Users** → add your YouTube account email
 7. **Save and Continue** → **Back to Dashboard**
 
-#### Create the access key
+#### Download your access key
 
 1. Go to **APIs & Services → Credentials**
 2. **Create Credentials → OAuth 2.0 Client ID**
 3. Application type: **Desktop app** → Name it anything → **Create**
 4. Click **Download JSON** on the new credential
-5. Rename the file to `client_secret.json`
-6. Place it inside the unzipped folder at:
-   ```
-   server/credentials/client_secret.json
-   ```
 
 ---
 
-### 3. Run setup.command
+### 3. Open the app
 
-Double-click **`setup.command`** inside the unzipped folder.
+Open **YouTube Analytics** from your Applications folder. The setup wizard appears and asks you to drop in the JSON file you just downloaded. Do that, and your browser will open for a one-time Google sign-in.
 
-It will:
-- Install the menu bar app to your Applications folder
-- Set up the background server that fetches your stats
-- Register it to start automatically on every login
-- Open your browser for a one-time Google sign-in
-
-After you approve access in the browser, your stats will appear in the menu bar within a few seconds.
-
-> If macOS says the file can't be opened, right-click it and choose **Open**.
+After you approve, your stats appear in the menu bar within a few seconds.
 
 ---
 
 ### 4. Add the Notification Centre widget (optional)
 
-1. Right-click your desktop → **Edit Widgets** (or open Notification Centre and scroll down)
+1. Right-click your desktop → **Edit Widgets**
 2. Search **YouTube Analytics**
 3. Drag in the size you want — Small, Medium, or Large
 
@@ -115,42 +104,42 @@ After you approve access in the browser, your stats will appear in the menu bar 
 
 Click the `●` dot in your menu bar → **Settings tab**.
 
-You can toggle metrics on/off and adjust how many days of data each metric covers. YouTube's analytics data has a 48–72 hour delay, so setting ranges to 7 days or more gives the most reliable numbers.
+Toggle metrics on/off and adjust how many days of data each one covers. YouTube's analytics data has a 48–72 hour delay, so ranges of 7 days or more give the most reliable numbers.
 
-Hit **Save** — changes take effect immediately without restarting anything.
+Hit **Save** — changes take effect immediately.
 
 ---
 
 ## Troubleshooting
 
 **App says "Server Offline"**
-The background server isn't running. Re-run `setup.command` to restart it.
+The background server stopped. Quit and reopen the app — it will restart automatically.
+
+**Setup wizard appeared but then disappeared without finishing**
+Quit the app and reopen it. The wizard will pick up where it left off.
 
 **Browser didn't open for Google sign-in**
-Make sure `server/credentials/client_secret.json` exists and your Google account is added as a test user in the OAuth consent screen (Step 2).
+Make sure your Google account is added as a test user in the OAuth consent screen (Step 2).
 
-**Sign-in failed or auth error**
-Delete `server/credentials/token.json` and re-run `setup.command` — it will ask you to sign in again.
+**Sign-in failed or "deleted client" error**
+Your access key may have been deleted in Google Cloud Console. Create a new one (Step 2d) and drop it into the app when it asks.
 
 **All metrics show 0**
-YouTube's analytics API has a 48–72 hour delay. Data for "today" isn't available yet — increase the time range to 7 days in Settings.
+YouTube's analytics data has a 48–72 hour delay — data for "today" won't be there yet. Increase the time range to 7 days in Settings.
 
 **Comments not showing**
-Your channel may have comments disabled, or the `youtube.force-ssl` scope wasn't added during setup. You can turn off Latest Comments in Settings.
-
-**macOS blocks the app on first open**
-Right-click the app or `setup.command` → **Open** → **Open** again to confirm.
+Your channel may have comments disabled, or the `youtube.force-ssl` scope was missed during setup. You can turn off Latest Comments in Settings.
 
 ---
 
 ## Your data stays on your Mac
 
-The app never sends your data anywhere. Here's what actually happens:
+The app never sends your data anywhere:
 
-- You sign in with Google once — the access token is saved in `server/credentials/token.json` on your Mac only
-- The background server fetches your stats directly from YouTube and stores them in memory
+- You sign in with Google once — the access token is saved locally on your Mac only
+- The background server fetches your stats directly from YouTube and keeps them in memory
 - Everything runs on `localhost` — nothing is reachable from outside your computer
-- The app only requests read-only access to your YouTube data — it cannot make any changes to your channel
+- The app only requests read-only access — it cannot make any changes to your channel
 
 ---
 
