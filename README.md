@@ -59,8 +59,8 @@ A lightweight local server authenticates with Google via OAuth and serves your Y
 ### 1. Clone
 
 ```bash
-git clone https://github.com/MustafaB3irat/ytAnalytics-widget.git ~/Developer/ytAnalytics
-cd ~/Developer/ytAnalytics
+git clone https://github.com/MustafaB3irat/ytAnalytics-widget.git
+cd ytAnalytics-widget
 ```
 
 ---
@@ -72,7 +72,7 @@ cd ~/Developer/ytAnalytics
 1. Go to [console.cloud.google.com](https://console.cloud.google.com)
 2. Click the project dropdown (top-left) → **New Project**
 3. Name it `ytAnalytics` → **Create**
-4. Make sure the new project is selected in the dropdown before continuing
+4. Make sure the new project is selected before continuing
 
 #### 2b. Enable the APIs
 
@@ -96,74 +96,95 @@ cd ~/Developer/ytAnalytics
 7. Click **Add Users** → add your YouTube account email
 8. Click **Save and Continue** → **Back to Dashboard**
 
-> **Why "External" and "Test users"?** Google requires apps in development to be external, and only the email addresses you list as test users can authenticate. Your data stays local.
+> **Why "External" and "Test users"?** Google requires apps in development to be external. Only the email addresses you list as test users can sign in. Your data stays entirely local.
 
-#### 2d. Create the OAuth client credential
+#### 2d. Create the OAuth credential
 
 1. Go to **APIs & Services → Credentials**
 2. Click **Create Credentials → OAuth 2.0 Client ID**
-3. Application type: **Desktop app**
-4. Name: `ytAnalytics Desktop` (anything is fine)
-5. Click **Create**
-6. Click **Download JSON** on the newly created credential
-7. Rename the downloaded file to `client_secret.json`
-8. Move it to:
+3. Application type: **Desktop app** → Name it anything → **Create**
+4. Click **Download JSON** on the newly created credential
+5. Rename the file to `client_secret.json`
+6. Place it at:
    ```
-   ~/Developer/ytAnalytics/server/credentials/client_secret.json
+   server/credentials/client_secret.json
    ```
 
 The `credentials/` folder is git-ignored — this file never leaves your machine.
 
 ---
 
-### 3. Python server
+### 3. Run setup.command
 
-```bash
-cd ~/Developer/ytAnalytics/server
+Double-click **`setup.command`** in Finder.
 
-# Create and activate a virtual environment
-python3 -m venv venv
-source venv/bin/activate
+Terminal opens and the script will:
+- Create a Python virtual environment in `server/venv/`
+- Install all dependencies
+- Register the server as a launchd agent (auto-starts on every login)
+- Start the server immediately
 
-# Install dependencies
-pip install -r requirements.txt
+On first run, **your browser will open** asking you to sign in with Google and approve read-only access to your YouTube data. After approval the token is saved to `server/credentials/token.json` — you will never be prompted again.
 
-# Start the server
-python server.py
-```
-
-On first run, a browser tab opens asking you to sign in with your Google account and approve access. After approval:
-- The token is saved to `credentials/token.json`
-- The server starts listening on `http://localhost:8765`
-- You will never be prompted again (tokens auto-refresh)
-
-**Verify it's working:**
-```bash
-curl http://localhost:8765/health
-curl http://localhost:8765/analytics | python3 -m json.tool
-```
-
-The first `/analytics` request returns `202 Accepted` while the initial YouTube fetch completes (~5–10 seconds). Subsequent requests return cached JSON instantly.
+> If you prefer the terminal: `bash setup.command`
 
 ---
 
-### 4. Auto-start on login
+### 4. Xcode — Widget & Menu Bar app
 
-Run the bundled install script once to register the server as a launchd agent — it will start automatically on every login without a terminal window:
+The Xcode project is pre-configured with both targets. No setup beyond signing.
 
-```bash
-cd ~/Developer/ytAnalytics/server
-bash install_autostart.sh
+1. Open **`xcode/ytAnalytics.xcodeproj`** in Xcode
+2. For each target (`ytAnalyticsWidget` and `ytAnalyticsMenuBar`):
+   - Select the target in the sidebar
+   - Go to **Signing & Capabilities** → set your **Team** (a free Apple ID works)
+3. Select a target from the scheme picker → **⌘R** to build and run
+
+**Adding the widget:**
+- Right-click your desktop or open Notification Centre
+- Click **Edit Widgets** → search "YouTube Analytics"
+- Drag it in — available in Small, Medium, and Large sizes
+
+The menu bar app places a `▶` icon in your status bar. Click it to open the popover.
+
+---
+
+## Configuration
+
+All settings live in `config.json` at the repo root. The menu bar app's **Settings tab** can update them live — no restart needed.
+
+```json
+{
+  "metrics": {
+    "views_24hr":        { "enabled": true,  "time_range_days": 1 },
+    "watch_time_24hr":   { "enabled": true,  "time_range_days": 1 },
+    "total_subscribers": { "enabled": true  },
+    "subscriber_delta":  { "enabled": true,  "time_range_days": 1 },
+    "top_video_today":   { "enabled": true,  "time_range_days": 1 },
+    "latest_comments":   { "enabled": true,  "max_count": 5 }
+  },
+  "server": {
+    "port": 8765,
+    "refresh_interval_seconds": 900
+  }
+}
 ```
 
-The script detects your venv path, writes a plist to `~/Library/LaunchAgents/`, and loads it immediately.
+**`time_range_days`** — how many days back to aggregate (1–90).  
+**`max_count`** — how many latest comments to fetch.  
+**`refresh_interval_seconds`** — how often the server re-fetches from YouTube (default: 900 = 15 min).
 
-**Useful commands:**
+---
+
+## Server management
+
+The server runs as a background launchd agent and restarts automatically after login or crashes.
+
 ```bash
-# View live server logs
+# View live logs
 tail -f ~/Library/Logs/ytAnalytics/server.log
 
-# Check the agent is registered
+# Check the agent is running
 launchctl list | grep ytanalytics
 
 # Stop the server
@@ -171,81 +192,10 @@ launchctl unload ~/Library/LaunchAgents/com.ytanalytics.server.plist
 
 # Start it again
 launchctl load ~/Library/LaunchAgents/com.ytanalytics.server.plist
+
+# Force a data refresh without restarting
+curl http://localhost:8765/refresh
 ```
-
----
-
-### 5. Xcode — Widget & Menu Bar app
-
-The Xcode project is pre-configured with both targets. No setup needed beyond signing.
-
-1. Open Xcode → **Open a Project or File**
-2. Navigate to `~/Developer/ytAnalytics/xcode/` → open **ytAnalytics.xcodeproj**
-3. For each target (`ytAnalyticsWidget` and `ytAnalyticsMenuBar`):
-   - Select the target in the sidebar
-   - Go to **Signing & Capabilities**
-   - Set your **Team** (your Apple ID — a free account works)
-4. Build and run each target (select the target from the scheme picker → ⌘R)
-
-**Adding the widget:**
-- Right-click your desktop or open Notification Centre
-- Click **Edit Widgets**
-- Search "YouTube Analytics" → drag it in
-- Available in Small, Medium, and Large sizes
-
-The menu bar app places a `▶` icon in your status bar showing live view counts. Click it to open the full popover.
-
----
-
-## Configuration
-
-All settings live in `config.json`. The server reads this on startup and the menu bar app's **Settings tab** can update it live (no restart needed).
-
-```json
-{
-  "metrics": {
-    "views_24hr": {
-      "enabled": true,
-      "time_range_days": 1
-    },
-    "watch_time_24hr": {
-      "enabled": true,
-      "time_range_days": 1
-    },
-    "total_subscribers": {
-      "enabled": true
-    },
-    "subscriber_delta": {
-      "enabled": true,
-      "time_range_days": 1
-    },
-    "top_video_today": {
-      "enabled": true,
-      "time_range_days": 1
-    },
-    "latest_comments": {
-      "enabled": true,
-      "max_count": 5
-    }
-  },
-  "server": {
-    "port": 8765,
-    "refresh_interval_seconds": 900
-  },
-  "oauth": {
-    "credentials_file": "credentials/client_secret.json",
-    "token_file": "credentials/token.json",
-    "scopes": [
-      "https://www.googleapis.com/auth/youtube.readonly",
-      "https://www.googleapis.com/auth/yt-analytics.readonly"
-    ]
-  }
-}
-```
-
-**`time_range_days`** — how many days back to aggregate (1–90). All time-range metrics support this.  
-**`max_count`** — how many latest comments to fetch.  
-**`refresh_interval_seconds`** — how often the server re-fetches from YouTube (default: 900 = 15 min).
 
 ---
 
@@ -271,21 +221,19 @@ All settings live in `config.json`. The server reads this on startup and the men
 }
 ```
 
-Changes are written back to `config.json` and take effect immediately.
-
 ---
 
 ## Project Structure
 
 ```
-ytAnalytics/
+ytAnalytics-widget/
+├── setup.command                  ← Double-click to set everything up
 ├── config.json                    ← All settings
 ├── server/
 │   ├── server.py                  ← Flask server (localhost:8765)
 │   ├── fetcher.py                 ← YouTube API calls
 │   ├── auth.py                    ← OAuth flow + token refresh
 │   ├── requirements.txt
-│   ├── install_autostart.sh       ← One-shot launchd setup
 │   └── credentials/               ← Git-ignored
 │       ├── client_secret.json     ← You add this (Step 2d)
 │       └── token.json             ← Auto-generated on first run
@@ -309,16 +257,17 @@ ytAnalytics/
 ## Troubleshooting
 
 **Widget / app shows "Server Offline"**
-→ The Python server isn't running. Run `bash install_autostart.sh` to set up auto-start, or start it manually with `python server.py` in the `server/` directory.
+→ The server isn't running. Re-run `setup.command` or start it manually:
+`launchctl load ~/Library/LaunchAgents/com.ytanalytics.server.plist`
 
-**Browser doesn't open / OAuth fails**
-→ Make sure `client_secret.json` is at `server/credentials/client_secret.json` and your Google account is listed as a test user in the OAuth consent screen.
+**Browser didn't open / OAuth failed**
+→ Make sure `server/credentials/client_secret.json` exists and your Google account is listed as a test user in the OAuth consent screen (Step 2c).
 
 **Token expired or auth error**
-→ Delete `credentials/token.json` and restart the server — a new browser-based sign-in will run automatically.
+→ Delete `server/credentials/token.json` and restart the server — a new browser sign-in runs automatically.
 
 **No data — stays loading**
-→ Normal on first run. The server fetches data from YouTube once on startup. Wait 10 seconds then hit `curl http://localhost:8765/health` to check status.
+→ Normal on first run. The server fetches from YouTube once on startup (~5–10 seconds). Check status: `curl http://localhost:8765/health`
 
 **Comments not showing**
 → YouTube's Comments API is unavailable on channels with comments disabled. Set `"latest_comments": { "enabled": false }` in `config.json`.
@@ -327,13 +276,13 @@ ytAnalytics/
 → Select your Apple ID team in **Signing & Capabilities** for both the `ytAnalyticsWidget` and `ytAnalyticsMenuBar` targets. A free Apple ID works.
 
 **YouTube quota exceeded**
-→ Default quota is 10,000 units/day. At 15-minute refresh intervals, ytAnalytics uses ~96 units/day. If you hit the limit, increase `refresh_interval_seconds` in `config.json`.
+→ Default is 10,000 units/day. At 15-minute refresh intervals, ytAnalytics uses ~96 units/day. Increase `refresh_interval_seconds` in `config.json` if needed.
 
 ---
 
 ## Security
 
-- OAuth tokens are stored **locally only** in `credentials/token.json` (git-ignored)
+- OAuth tokens are stored **locally only** in `server/credentials/token.json` (git-ignored)
 - The server binds to `127.0.0.1` — never network-accessible
 - API scopes are **read-only**: `youtube.readonly` + `yt-analytics.readonly`
 - Your credentials and data never leave your machine
