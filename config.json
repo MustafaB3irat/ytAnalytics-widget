@@ -1,0 +1,54 @@
+{
+  "metrics": {
+    "views_24hr": {
+      "enabled": true,
+      "label": "Views",
+      "icon": "eye",
+      "time_range_days": 1
+    },
+    "watch_time_24hr": {
+      "enabled": true,
+      "label": "Watch Time",
+      "icon": "clock",
+      "unit": "minutes",
+      "time_range_days": 1
+    },
+    "total_subscribers": {
+      "enabled": true,
+      "label": "Subscribers",
+      "icon": "person.2"
+    },
+    "latest_comments": {
+      "enabled": true,
+      "label": "Latest Comments",
+      "icon": "bubble.left",
+      "max_count": 5
+    },
+    "top_video_today": {
+      "enabled": true,
+      "label": "Top Video",
+      "icon": "star",
+      "metric": "views",
+      "time_range_days": 1
+    },
+    "subscriber_delta": {
+      "enabled": true,
+      "label": "Subscriber Change",
+      "icon": "arrow.up.person",
+      "time_range_days": 1
+    }
+  },
+  "server": {
+    "port": 8765,
+    "refresh_interval_seconds": 900,
+    "cache_ttl_seconds": 900
+  },
+  "oauth": {
+    "credentials_file": "credentials/client_secret.json",
+    "token_file": "credentials/token.json",
+    "scopes": [
+      "https://www.googleapis.com/auth/youtube.readonly",
+      "https://www.googleapis.com/auth/yt-analytics.readonly"
+    ]
+  }
+}
