@@ -16,6 +16,7 @@ struct ytAnalyticsApp: App {
 
 // MARK: - App Delegate
 
+@MainActor
 class AppDelegate: NSObject, NSApplicationDelegate {
     var statusItem: NSStatusItem?
     var popover: NSPopover?
@@ -49,7 +50,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 
         // Update menu bar title with live views
         vm.onUpdate = { [weak self] in
-            DispatchQueue.main.async {
+            Task { @MainActor [weak self] in
                 self?.updateStatusBarTitle(vm: vm)
             }
         }
