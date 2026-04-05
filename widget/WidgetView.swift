@@ -92,7 +92,8 @@ struct SmallWidgetView: View {
                 StatRow(icon: "person.2.fill", value: subs.value.compactFormatted,
                         label: "subscribers",  color: .purple)
             }
-            if let delta = analytics.metrics.subscriberDelta?.data {
+            if let delta = analytics.metrics.subscriberDelta?.data,
+               delta.gained > 0 || delta.lost > 0 {
                 let isPos = delta.net >= 0
                 StatRow(
                     icon: isPos ? "arrow.up.circle.fill" : "arrow.down.circle.fill",
@@ -135,14 +136,15 @@ struct MediumWidgetView: View {
                                 label: "views (\(views.rangeLabel))",  color: .blue)
                     }
                     if let wt = analytics.metrics.watchTime24hr?.data {
-                        StatRow(icon: "clock.fill",    value: "\(wt.hours)h",
+                        StatRow(icon: "clock.fill",    value: "\(wt.hours.trimmedDecimal)h",
                                 label: "watch (\(wt.rangeLabel))",   color: .orange)
                     }
                     if let subs = analytics.metrics.totalSubscribers?.data {
                         StatRow(icon: "person.2.fill", value: subs.value.compactFormatted,
                                 label: "subscribers",  color: .purple)
                     }
-                    if let delta = analytics.metrics.subscriberDelta?.data {
+                    if let delta = analytics.metrics.subscriberDelta?.data,
+                       delta.gained > 0 || delta.lost > 0 {
                         let isPos = delta.net >= 0
                         StatRow(
                             icon: isPos ? "arrow.up.circle.fill" : "arrow.down.circle.fill",
@@ -209,13 +211,13 @@ struct LargeWidgetView: View {
             Divider()
 
             // Stats row
-            HStack(spacing: 12) {
+            HStack(alignment: .top, spacing: 12) {
                 if let views = analytics.metrics.views24hr?.data {
                     BigStat(value: views.value.compactFormatted,
                             label: "Views (\(views.rangeLabel))", icon: "eye.fill", color: .blue)
                 }
                 if let wt = analytics.metrics.watchTime24hr?.data {
-                    BigStat(value: "\(wt.hours)h",
+                    BigStat(value: "\(wt.hours.trimmedDecimal)h",
                             label: "Watch (\(wt.rangeLabel))", icon: "clock.fill", color: .orange)
                 }
                 if let subs = analytics.metrics.totalSubscribers?.data {
@@ -225,7 +227,8 @@ struct LargeWidgetView: View {
             }
 
             // Subscriber delta pill
-            if let delta = analytics.metrics.subscriberDelta?.data {
+            if let delta = analytics.metrics.subscriberDelta?.data,
+               delta.gained > 0 || delta.lost > 0 {
                 let isPos = delta.net >= 0
                 HStack(spacing: 6) {
                     Image(systemName: isPos ? "arrow.up.circle.fill" : "arrow.down.circle.fill")
@@ -302,12 +305,15 @@ struct StatRow: View {
 struct BigStat: View {
     let value: String; let label: String; let icon: String; let color: Color
     var body: some View {
-        VStack(alignment: .leading, spacing: 2) {
-            Image(systemName: icon).foregroundColor(color).font(.system(size: 16))
+        VStack(alignment: .center, spacing: 4) {
+            Image(systemName: icon).foregroundColor(color).font(.system(size: 14))
             Text(value).font(.system(size: 18, weight: .bold))
             Text(label).font(.system(size: 10)).foregroundColor(.secondary)
+                .multilineTextAlignment(.center)
         }
-        .frame(maxWidth: .infinity, alignment: .leading)
+        .padding(10)
+        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
+        .background(color.opacity(0.12)).cornerRadius(10)
     }
 }
 
