@@ -7,35 +7,72 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		AA000001000000000000001 /* Models.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA100001000000000000001 /* Models.swift */; };
-		AA000001000000000000002 /* Models.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA100001000000000000001 /* Models.swift */; };
-		AA000001000000000000003 /* Provider.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA100001000000000000002 /* Provider.swift */; };
-		AA000001000000000000004 /* WidgetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA100001000000000000003 /* WidgetView.swift */; };
-		AA000001000000000000005 /* ytAnalyticsWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA100001000000000000004 /* ytAnalyticsWidget.swift */; };
-		AA000001000000000000006 /* ytAnalyticsApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA100001000000000000005 /* ytAnalyticsApp.swift */; };
-		AA000001000000000000007 /* AnalyticsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA100001000000000000006 /* AnalyticsViewModel.swift */; };
-		AA000001000000000000008 /* MenuBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA100001000000000000007 /* MenuBarView.swift */; };
-		AA000001000000000000009 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = AA100001000000000000008 /* Assets.xcassets */; };
-		AA000001000000000000010 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = AA100001000000000000009 /* MenuBarAssets.xcassets */; };
+		AA000001000000000000001 /* ../widget/Models.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA100001000000000000001 /* ../widget/Models.swift */; };
+		AA000001000000000000002 /* ../widget/Models.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA100001000000000000001 /* ../widget/Models.swift */; };
+		AA000001000000000000003 /* ../widget/Provider.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA100001000000000000002 /* ../widget/Provider.swift */; };
+		AA000001000000000000004 /* ../widget/WidgetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA100001000000000000003 /* ../widget/WidgetView.swift */; };
+		AA000001000000000000005 /* ../widget/ytAnalyticsWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA100001000000000000004 /* ../widget/ytAnalyticsWidget.swift */; };
+		AA000001000000000000006 /* ../menubar/ytAnalyticsApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA100001000000000000005 /* ../menubar/ytAnalyticsApp.swift */; };
+		AA000001000000000000007 /* ../menubar/AnalyticsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA100001000000000000006 /* ../menubar/AnalyticsViewModel.swift */; };
+		AA000001000000000000008 /* ../menubar/MenuBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA100001000000000000007 /* ../menubar/MenuBarView.swift */; };
+		AA000001000000000000012 /* ../menubar/ServerManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA100001000000000000012 /* ../menubar/ServerManager.swift */; };
+		AA000001000000000000013 /* ../menubar/OnboardingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA100001000000000000013 /* ../menubar/OnboardingView.swift */; };
+		AA000001000000000000009 /* ytAnalyticsWidget/Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = AA100001000000000000008 /* ytAnalyticsWidget/Assets.xcassets */; };
+		AA000001000000000000010 /* ytAnalyticsMenuBar/Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = AA100001000000000000009 /* ytAnalyticsMenuBar/Assets.xcassets */; };
 		AA000001000000000000011 /* ytAnalyticsWidget.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = AA200001000000000000001 /* ytAnalyticsWidget.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
 
+/* Begin PBXContainerItemProxy section */
+		AAPROXY00000000000000001 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = AA700001000000000000001 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = AA400001000000000000001;
+			remoteInfo = ytAnalyticsWidget;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		AA600001000000000000005 /* Embed App Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				AA000001000000000000011 /* ytAnalyticsWidget.appex in Embed App Extensions */,
+			);
+			name = "Embed App Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
 /* Begin PBXFileReference section */
-		AA100001000000000000001 /* Models.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "../widget/Models.swift"; sourceTree = "<group>"; };
-		AA100001000000000000002 /* Provider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "../widget/Provider.swift"; sourceTree = "<group>"; };
-		AA100001000000000000003 /* WidgetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "../widget/WidgetView.swift"; sourceTree = "<group>"; };
-		AA100001000000000000004 /* ytAnalyticsWidget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "../widget/ytAnalyticsWidget.swift"; sourceTree = "<group>"; };
-		AA100001000000000000005 /* ytAnalyticsApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "../menubar/ytAnalyticsApp.swift"; sourceTree = "<group>"; };
-		AA100001000000000000006 /* AnalyticsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "../menubar/AnalyticsViewModel.swift"; sourceTree = "<group>"; };
-		AA100001000000000000007 /* MenuBarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "../menubar/MenuBarView.swift"; sourceTree = "<group>"; };
-		AA100001000000000000008 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "ytAnalyticsWidget/Assets.xcassets"; sourceTree = "<group>"; };
-		AA100001000000000000009 /* MenuBarAssets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "ytAnalyticsMenuBar/Assets.xcassets"; sourceTree = "<group>"; };
-		AA100001000000000000010 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "ytAnalyticsWidget/Info.plist"; sourceTree = "<group>"; };
+		AA100001000000000000001 /* ../widget/Models.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ../widget/Models.swift; sourceTree = "<group>"; };
+		AA100001000000000000002 /* ../widget/Provider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ../widget/Provider.swift; sourceTree = "<group>"; };
+		AA100001000000000000003 /* ../widget/WidgetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ../widget/WidgetView.swift; sourceTree = "<group>"; };
+		AA100001000000000000004 /* ../widget/ytAnalyticsWidget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ../widget/ytAnalyticsWidget.swift; sourceTree = "<group>"; };
+		AA100001000000000000005 /* ../menubar/ytAnalyticsApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ../menubar/ytAnalyticsApp.swift; sourceTree = "<group>"; };
+		AA100001000000000000006 /* ../menubar/AnalyticsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ../menubar/AnalyticsViewModel.swift; sourceTree = "<group>"; };
+		AA100001000000000000007 /* ../menubar/MenuBarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ../menubar/MenuBarView.swift; sourceTree = "<group>"; };
+		AA100001000000000000012 /* ../menubar/ServerManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ../menubar/ServerManager.swift; sourceTree = "<group>"; };
+		AA100001000000000000013 /* ../menubar/OnboardingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ../menubar/OnboardingView.swift; sourceTree = "<group>"; };
+		AA100001000000000000008 /* ytAnalyticsWidget/Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = ytAnalyticsWidget/Assets.xcassets; sourceTree = "<group>"; };
+		AA100001000000000000009 /* ytAnalyticsMenuBar/Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = ytAnalyticsMenuBar/Assets.xcassets; sourceTree = "<group>"; };
+		AA100001000000000000010 /* ytAnalyticsWidget/Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = ytAnalyticsWidget/Info.plist; sourceTree = "<group>"; };
 		AA200001000000000000001 /* ytAnalyticsWidget.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = ytAnalyticsWidget.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		AA200001000000000000002 /* ytAnalyticsMenuBar.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ytAnalyticsMenuBar.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXGroup section */
+		AA300001000000000000000 = {
+			isa = PBXGroup;
+			children = (
+				AA300001000000000000002 /* Widget Sources */,
+				AA300001000000000000003 /* Menu Bar Sources */,
+				AA300001000000000000001 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
 		AA300001000000000000001 /* Products */ = {
 			isa = PBXGroup;
 			children = (
@@ -48,35 +85,27 @@
 		AA300001000000000000002 /* Widget Sources */ = {
 			isa = PBXGroup;
 			children = (
-				AA100001000000000000001 /* Models.swift */,
-				AA100001000000000000002 /* Provider.swift */,
-				AA100001000000000000003 /* WidgetView.swift */,
-				AA100001000000000000004 /* ytAnalyticsWidget.swift */,
-				AA100001000000000000008 /* Assets.xcassets */,
-				AA100001000000000000010 /* Info.plist */,
+				AA100001000000000000002 /* ../widget/Provider.swift */,
+				AA100001000000000000003 /* ../widget/WidgetView.swift */,
+				AA100001000000000000004 /* ../widget/ytAnalyticsWidget.swift */,
+				AA100001000000000000008 /* ytAnalyticsWidget/Assets.xcassets */,
+				AA100001000000000000010 /* ytAnalyticsWidget/Info.plist */,
 			);
 			name = "Widget Sources";
 			sourceTree = "<group>";
 		};
-		AA300001000000000000003 /* MenuBar Sources */ = {
+		AA300001000000000000003 /* Menu Bar Sources */ = {
 			isa = PBXGroup;
 			children = (
-				AA100001000000000000001 /* Models.swift */,
-				AA100001000000000000005 /* ytAnalyticsApp.swift */,
-				AA100001000000000000006 /* AnalyticsViewModel.swift */,
-				AA100001000000000000007 /* MenuBarView.swift */,
-				AA100001000000000000009 /* MenuBarAssets.xcassets */,
+				AA100001000000000000001 /* ../widget/Models.swift */,
+				AA100001000000000000005 /* ../menubar/ytAnalyticsApp.swift */,
+				AA100001000000000000006 /* ../menubar/AnalyticsViewModel.swift */,
+				AA100001000000000000007 /* ../menubar/MenuBarView.swift */,
+				AA100001000000000000012 /* ../menubar/ServerManager.swift */,
+				AA100001000000000000013 /* ../menubar/OnboardingView.swift */,
+				AA100001000000000000009 /* ytAnalyticsMenuBar/Assets.xcassets */,
 			);
 			name = "Menu Bar Sources";
-			sourceTree = "<group>";
-		};
-		AA300001000000000000000 = {
-			isa = PBXGroup;
-			children = (
-				AA300001000000000000002 /* Widget Sources */,
-				AA300001000000000000003 /* MenuBar Sources */,
-				AA300001000000000000001 /* Products */,
-			);
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -89,8 +118,10 @@
 				AA600001000000000000001 /* Sources */,
 				AA600001000000000000002 /* Resources */,
 			);
-			buildRules = ();
-			dependencies = ();
+			buildRules = (
+			);
+			dependencies = (
+			);
 			name = ytAnalyticsWidget;
 			productName = ytAnalyticsWidget;
 			productReference = AA200001000000000000001 /* ytAnalyticsWidget.appex */;
@@ -102,9 +133,11 @@
 			buildPhases = (
 				AA600001000000000000003 /* Sources */,
 				AA600001000000000000004 /* Resources */,
+				AA600001000000000000007 /* Bundle Server Files */,
 				AA600001000000000000005 /* Embed App Extensions */,
 			);
-			buildRules = ();
+			buildRules = (
+			);
 			dependencies = (
 				AADEP000000000000000001 /* PBXTargetDependency */,
 			);
@@ -150,34 +183,12 @@
 		};
 /* End PBXProject section */
 
-/* Begin PBXSourcesBuildPhase section */
-		AA600001000000000000001 /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				AA000001000000000000001 /* Models.swift in Sources */,
-				AA000001000000000000003 /* Provider.swift in Sources */,
-				AA000001000000000000004 /* WidgetView.swift in Sources */,
-				AA000001000000000000005 /* ytAnalyticsWidget.swift in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
+/* Begin PBXResourcesBuildPhase section */
 		AA600001000000000000002 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				AA000001000000000000009 /* Assets.xcassets in Resources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		AA600001000000000000003 /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				AA000001000000000000002 /* Models.swift in Sources */,
-				AA000001000000000000006 /* ytAnalyticsApp.swift in Sources */,
-				AA000001000000000000007 /* AnalyticsViewModel.swift in Sources */,
-				AA000001000000000000008 /* MenuBarView.swift in Sources */,
+				AA000001000000000000009 /* ytAnalyticsWidget/Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -185,35 +196,54 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				AA000001000000000000010 /* Assets.xcassets in Resources */,
+				AA000001000000000000010 /* ytAnalyticsMenuBar/Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		AA600001000000000000007 /* Bundle Server Files */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = ();
+			inputFileListPaths = ();
+			inputPaths = ();
+			name = "Bundle Server Files";
+			outputFileListPaths = ();
+			outputPaths = ();
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/bash;
+			shellScript = "DEST=\"${BUILT_PRODUCTS_DIR}/${CONTENTS_FOLDER_PATH}/Resources/server\"\nmkdir -p \"$DEST\"\nrsync -r --exclude=venv --exclude=__pycache__ --exclude='*.pyc' --exclude=credentials --exclude='.DS_Store' \"${SRCROOT}/../server/\" \"$DEST/\"\ncp \"${SRCROOT}/../config.json\" \"$DEST/config.json\"\n";
+		};
+/* End PBXShellScriptBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		AA600001000000000000001 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				AA000001000000000000001 /* ../widget/Models.swift in Sources */,
+				AA000001000000000000003 /* ../widget/Provider.swift in Sources */,
+				AA000001000000000000004 /* ../widget/WidgetView.swift in Sources */,
+				AA000001000000000000005 /* ../widget/ytAnalyticsWidget.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		AA600001000000000000003 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				AA000001000000000000002 /* ../widget/Models.swift in Sources */,
+				AA000001000000000000006 /* ../menubar/ytAnalyticsApp.swift in Sources */,
+				AA000001000000000000007 /* ../menubar/AnalyticsViewModel.swift in Sources */,
+				AA000001000000000000008 /* ../menubar/MenuBarView.swift in Sources */,
+				AA000001000000000000012 /* ../menubar/ServerManager.swift in Sources */,
+				AA000001000000000000013 /* ../menubar/OnboardingView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
-
-/* Begin PBXCopyFilesBuildPhase section */
-		AA600001000000000000005 /* Embed App Extensions */ = {
-			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 2147483647;
-			dstPath = "";
-			dstSubfolderSpec = 13;
-			files = (
-				AA000001000000000000011 /* ytAnalyticsWidget.appex in Embed App Extensions */,
-			);
-			name = "Embed App Extensions";
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-/* End PBXCopyFilesBuildPhase section */
-
-/* Begin PBXContainerItemProxy section */
-		AAPROXY00000000000000001 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = AA700001000000000000001 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = AA400001000000000000001;
-			remoteInfo = ytAnalyticsWidget;
-		};
-/* End PBXContainerItemProxy section */
 
 /* Begin PBXTargetDependency section */
 		AADEP000000000000000001 /* PBXTargetDependency */ = {
@@ -224,7 +254,7 @@
 /* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
-		AA800001000000000000001 /* Debug - Project */ = {
+		AA800001000000000000001 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
@@ -284,7 +314,7 @@
 			};
 			name = Debug;
 		};
-		AA800001000000000000002 /* Release - Project */ = {
+		AA800001000000000000002 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
@@ -311,15 +341,16 @@
 			};
 			name = Release;
 		};
-		AA800001000000000000003 /* Debug - Widget */ = {
+		AA800001000000000000003 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = C5FRN97RYA;
 				GENERATE_INFOPLIST_FILE = NO;
-				INFOPLIST_FILE = "ytAnalyticsWidget/Info.plist";
+				INFOPLIST_FILE = ytAnalyticsWidget/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",
@@ -334,15 +365,16 @@
 			};
 			name = Debug;
 		};
-		AA800001000000000000004 /* Release - Widget */ = {
+		AA800001000000000000004 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = C5FRN97RYA;
 				GENERATE_INFOPLIST_FILE = NO;
-				INFOPLIST_FILE = "ytAnalyticsWidget/Info.plist";
+				INFOPLIST_FILE = ytAnalyticsWidget/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",
@@ -357,14 +389,15 @@
 			};
 			name = Release;
 		};
-		AA800001000000000000005 /* Debug - MenuBar */ = {
+		AA800001000000000000005 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_ENTITLEMENTS = "ytAnalyticsMenuBar/ytAnalyticsMenuBar.entitlements";
+				CODE_SIGN_ENTITLEMENTS = ytAnalyticsMenuBar/ytAnalyticsMenuBar.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = C5FRN97RYA;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_LSUIElement = YES;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
@@ -381,14 +414,15 @@
 			};
 			name = Debug;
 		};
-		AA800001000000000000006 /* Release - MenuBar */ = {
+		AA800001000000000000006 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_ENTITLEMENTS = "ytAnalyticsMenuBar/ytAnalyticsMenuBar.entitlements";
+				CODE_SIGN_ENTITLEMENTS = ytAnalyticsMenuBar/ytAnalyticsMenuBar.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = C5FRN97RYA;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_LSUIElement = YES;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
@@ -436,7 +470,6 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
-
 	};
 	rootObject = AA700001000000000000001 /* Project object */;
 }
