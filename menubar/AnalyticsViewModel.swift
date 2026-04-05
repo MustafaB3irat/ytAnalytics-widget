@@ -152,6 +152,9 @@ class AnalyticsViewModel: ObservableObject {
             // Re-schedule the poll timer with the new interval
             schedulePollTimer()
 
+            // Re-fetch with the new settings so Analytics labels update immediately
+            forceRefresh()
+
             // Flash "Saved ✓" in the UI
             settingsSaved = true
             try? await Task.sleep(nanoseconds: 2_000_000_000)

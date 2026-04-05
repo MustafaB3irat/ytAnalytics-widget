@@ -154,15 +154,23 @@ struct SettingsTab: View {
         ("6 hours",    360),
     ]
 
-    // Human-readable metric labels
-    private let metricLabels: [(key: String, label: String)] = [
-        ("views_24hr",        "Views (24h)"),
-        ("watch_time_24hr",   "Watch Time (24h)"),
-        ("total_subscribers", "Total Subscribers"),
-        ("subscriber_delta",  "Subscriber Change"),
-        ("top_video_today",   "Top Video Today"),
-        ("latest_comments",   "Latest Comments"),
-    ]
+    // Builds a human-readable range suffix from the configured days value.
+    private func rangeSuffix(for key: String) -> String {
+        guard let days = vm.metricTimeRangeDays[key] else { return "" }
+        return days == 1 ? " (24h)" : " (\(days)d)"
+    }
+
+    // Human-readable metric labels — reactive to current time range settings.
+    private var metricLabels: [(key: String, label: String)] {
+        [
+            ("views_24hr",        "Views\(rangeSuffix(for: "views_24hr"))"),
+            ("watch_time_24hr",   "Watch Time\(rangeSuffix(for: "watch_time_24hr"))"),
+            ("total_subscribers", "Total Subscribers"),
+            ("subscriber_delta",  "Subscriber Change\(rangeSuffix(for: "subscriber_delta"))"),
+            ("top_video_today",   "Top Video Today\(rangeSuffix(for: "top_video_today"))"),
+            ("latest_comments",   "Latest Comments"),
+        ]
+    }
 
     // Metrics that support a configurable time range
     private let timeRangeMetrics: [(key: String, label: String)] = [
