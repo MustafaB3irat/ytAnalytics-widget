@@ -1,6 +1,6 @@
 <div align="center">
 
-# ytAnalytics
+# YouTube Analytics
 
 **Your YouTube channel stats — natively on your Mac.**
 
