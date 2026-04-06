@@ -4,7 +4,9 @@
       "Bash(plutil:*)",
       "Bash(gh auth:*)",
       "Bash(git add:*)",
-      "Bash(git commit:*)"
+      "Bash(git commit:*)",
+      "Bash(xcodebuild -project xcode/ytAnalytics.xcodeproj -scheme ytAnalyticsMenuBar -configuration Debug clean)",
+      "Bash(xcodebuild -project xcode/ytAnalytics.xcodeproj -scheme ytAnalyticsMenuBar -configuration Debug)"
     ]
   }
 }
